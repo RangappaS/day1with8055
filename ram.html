@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBPS English Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 95%;
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      font-size: 18px;
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #eee;
+      font-size: 16px;
+      transition: 0.3s;
+      
+    }
+    h1{
+        color: #0c89a2;
+    }
+    .options button:hover { background: #ddd; }
+    .selected { background: #f9e79f !important; } /* Yellow */
+    .correct { background: #82e0aa !important; color: black; } /* Green */
+    .wrong { background: #f1948a !important; color: black; } /* Red */
+    .controls {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .controls button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #3498db;
+      color: white;
+      font-size: 14px;
+    }
+    .score {
+      font-size: 20px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+    <H1>Welcome to IBPS </H1>
+  <h2 id="question"></h2>
+  <div class="options" id="options"></div>
+  <div class="controls">
+    <button onclick="prevQuestion()">Previous</button>
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+  <div class="score" id="score"></div>
+</div>
+
+<script>
+const quizData = [
+  { q: "Choose the correct synonym of 'Abundant':", options: ["Rare","Plentiful","Small","Empty"], answer: 1 },
+  { q: "He ______ to school every day.", options: ["go","goes","going","gone"], answer: 1 },
+  { q: "Antonym of 'Honest':", options: ["Truthful","Loyal","Dishonest","Sincere"], answer: 2 },
+  { q: "Choose the correct spelling:", options: ["Commitee","Committee","Commettee","Comittie"], answer: 1 },
+  { q: "Find the error: She do not like apples.", options: ["She","do","not","apples"], answer: 1 },
+  { q: "The sun ______ in the east.", options: ["rise","rises","rising","risen"], answer: 1 },
+  { q: "Synonym of 'Quick':", options: ["Fast","Slow","Lazy","Dull"], answer: 0 },
+  { q: "Antonym of 'Bright':", options: ["Shiny","Dull","Clever","Smart"], answer: 1 },
+  { q: "He is senior ___ me.", options: ["than","to","from","for"], answer: 1 },
+  { q: "The book is _____ the table.", options: ["in","on","at","of"], answer: 1 }
+];
+
+let current = 0;
+let score = 0;
+let answered = Array(quizData.length).fill(false);
+
+function loadQuestion() {
+  let q = quizData[current];
+  document.getElementById("question").innerText = `Q${current+1}. ${q.q}`;
+  let optionsHTML = "";
+  q.options.forEach((opt,i) => {
+    optionsHTML += `<button onclick="checkAnswer(${i}, this)">${opt}</button>`;
+  });
+  document.getElementById("options").innerHTML = optionsHTML;
+  document.getElementById("score").innerText = "";
+}
+function checkAnswer(selected, btn) {
+  if (answered[current]) return; // prevent double
+  answered[current] = true;
+  let buttons = document.querySelectorAll("#options button");
+  buttons[selected].classList.add("selected");
+  if (selected === quizData[current].answer) {
+    buttons[selected].classList.remove("selected");
+    buttons[selected].classList.add("correct");
+    score++;
+  } else {
+    buttons[selected].classList.remove("selected");
+    buttons[selected].classList.add("wrong");
+    buttons[quizData[current].answer].classList.add("correct");
+  }
+  if (current === quizData.length-1) {
+    document.getElementById("score").innerText = `✅ Final Score: ${score} / ${quizData.length}`;
+  }
+}
+function nextQuestion() {
+  if (current < quizData.length-1) {
+    current++;
+    loadQuestion();
+  }
+}
+function prevQuestion() {
+  if (current > 0) {
+    current--;
+    loadQuestion();
+  }
+}
+loadQuestion();
+</script>
+
+</body>
+</html>
